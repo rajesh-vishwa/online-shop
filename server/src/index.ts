@@ -1,21 +1,19 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import compress from "compression";
-import cors from "cors";
-import helmet from "helmet";
+import mongoose from "mongoose";
+import config from "./config/config";
+import app from "./express";
 
-const app = express();
-
-app.use(express.json());
-app.use(cookieParser());
-app.use(compress());
-// secure apps by setting various HTTP headers
-app.use(helmet());
-// enable CORS - Cross Origin Resource Sharing
-app.use(cors());
-
-app.get("/", (req, res) => {
-  res.send("New app added");
+process.on("unhandledRejection", (ex) => {
+  throw ex;
 });
 
-app.listen(8000, () => console.log("Server running"));
+mongoose.Promise = global.Promise;
+mongoose
+  .connect(config.mongoUri)
+  .then(() => console.log("mongoDb connected"))
+  .catch((error) => console.log("Could not connect to mongodb "));
+
+mongoose.connection.on("error", () => {
+  console.log(`unable to connect to database: ${config.mongoUri}`);
+});
+
+app.listen(config.port, () => console.log(`Server running on ${config.port}`));
