@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "A backend nodejs api for online-shop",
   "main": "index.ts",
   "scripts": {
     "start": "nodemon index.ts"
@@ -10,9 +10,10 @@
     "node",
     "typescript",
     "mongoDB",
-    "MERN"
+    "mern",
+    "express"
   ],
-  "author": "sms.rajesh@gmail.com",
+  "author": "Rajesh Vishwakarma",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.17",
