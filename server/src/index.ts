@@ -15,7 +15,7 @@ app.use(helmet());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("New app added");
 });
 
 app.listen(8000, () => console.log("Server running"));
