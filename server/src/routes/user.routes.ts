@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
   .route("/api/users")
-  //.get(userCtrl.list)
-  .post(userController.create);
+  .get(userController.getAllUsers)
+  .post(userController.createUser);
 
 export default router;

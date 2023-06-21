@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import { CreateUserDto } from "../dtos/create-user.dto";
 import User, { validateUser } from "../models/user.model";
+import errorHandler from "./../helpers/dbErrorHandler";
 
-const create = async (req: Request, res: Response) => {
+// register user
+const createUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body as CreateUserDto;
   // validate request payload of user
   const { error } = validateUser(req.body);
@@ -27,12 +29,23 @@ const create = async (req: Request, res: Response) => {
     });
   } catch (err) {
     return res.status(400).json({
-      //error: errorHandler.getErrorMessage(err),
-      error: " user error",
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    let users = await User.find().select("name email updated created");
+    res.json(users);
+  } catch (error) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(error),
     });
   }
 };
 
 export default {
-  create,
+  createUser,
+  getAllUsers,
 };
