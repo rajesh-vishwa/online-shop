@@ -1,9 +1,23 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import { randomInt } from "crypto";
 import Joi from "joi";
 import * as bcrypt from "bcrypt";
+import { CreateUserDto } from "../dtos/create-user.dto";
 
-const userSchema = new mongoose.Schema({
+interface IUserDocument extends Document {
+  name: string;
+  email: string;
+  hashed_password: string;
+  salt?: string;
+  updated?: Date;
+  created?: Date;
+  isSeller?: boolean;
+  generateSalt: () => number;
+  hashPlainPassword: (plainPassword: string) => Promise<string>;
+  authenticate: (plainPassword: string) => Promise<boolean>;
+}
+
+const userSchema: Schema<IUserDocument> = new mongoose.Schema<IUserDocument>({
   name: { type: String, trim: true, required: true, min: 3, max: 255 },
   email: {
     type: String,
@@ -31,7 +45,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods = {
-  generateSalt: function () {
+  generateSalt: function (): number {
     return randomInt(8, 12);
   },
   hashPlainPassword: async function (plainPassword: string) {
@@ -52,11 +66,11 @@ userSchema.methods = {
   },
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<IUserDocument>("User", userSchema);
 
 export default User;
 
-export function validateUser(user: any) {
+export function validateUser(user: CreateUserDto) {
   const schema = Joi.object({
     name: Joi.string().required().min(3).max(255),
     email: Joi.string().required().min(3).max(255).email(),

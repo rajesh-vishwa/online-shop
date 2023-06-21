@@ -5,6 +5,9 @@ import compress from "compression";
 import cors from "cors";
 import helmet from "helmet";
 
+// routes
+import userRoutes from "./routes/user.routes";
+
 const app = express();
 
 app.use(express.json());
@@ -14,6 +17,9 @@ app.use(compress());
 app.use(helmet());
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
+
+// /api/users
+app.use("/", userRoutes);
 
 app.get("/", (req, res) => {
   res.send(config.env);
