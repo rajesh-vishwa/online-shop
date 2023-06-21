@@ -9,7 +9,7 @@ process.on("unhandledRejection", (ex) => {
 mongoose.Promise = global.Promise;
 mongoose
   .connect(config.mongoUri)
-  .then(() => console.log("mongoDb connected"))
+  .then(() => console.log(`mongoDb connected to:  ${config.mongoUri}`))
   .catch((error) => console.log("Could not connect to mongodb "));
 
 mongoose.connection.on("error", () => {
